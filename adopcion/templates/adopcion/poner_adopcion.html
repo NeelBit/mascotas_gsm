@@ -1,0 +1,43 @@
+{% extends 'mascotasgsmApp/base.html' %}
+
+{% block title %} - Poner en adopción {% endblock %}
+
+{% block content %}
+<section>
+    <div class="section center">
+        {% if user.is_authenticated %}
+
+            <div class="card-panel teal lighten-3 col s12">
+                <div class="col s6"><h5>
+                    Bienvenido!, ingresaste como: <span class="hoverable redondeado" onclick="M.toast({html: 'Su correo es: {{ user.email }}', classes: 'rounded'})"> {{ user.username }} </span>
+                </h5></div>
+                <div class="col s6">
+                    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="Foto de perfil" width="50px" class="redondeado z-depth-3">
+                </div>
+                
+                <!-- FORMULARIO -->
+                <div class="card-panel col s12 redondeado">
+                    <form action="" method='post' enctype="multipart/form-data" class='redondeado'> {% comment %} formenctype='multipart/form-data' {% endcomment %}
+                        {% csrf_token %}
+                        
+                        <table class="highlight">{{form.as_table}}</table>
+
+                        <button class="btn btn-large waves-effect light-blue darken-2 waves-light pulse" type="submit">Enviar</button>
+
+                    </form>
+                </div>
+
+            </div>
+
+            {% else %}
+                <div class="card-panel teal lighten-3 col s12">
+                    <div class="col s12"><h5>
+                    Hola!, ingresa con una cuenta de Google para poder publicar y ver las formas de contacto.
+                    </h5></div>
+                </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

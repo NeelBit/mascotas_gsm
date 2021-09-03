@@ -1,0 +1,165 @@
+{% extends 'mascotasgsmApp/base.html' %}
+{% load socialaccount %}
+{% block title %} - Detalles {% endblock %}
+
+{% block content %}
+
+<div class="section">
+    {% if post %}
+    <div class="col s6">
+        <span class="blue-text teal lighten-5 left redondeado"> {{ post.fecha_publi|date:"SHORT_DATE_FORMAT" }}</span>
+    </div>
+    
+    {% comment %} {% if post.disponibilidad %}Esta disponible{% endif %} {% endcomment %}
+
+    <div class="col s6 right">
+
+        <a href="
+            {% if post.tipo == 'perro' %}
+                {% url 'perros' %}
+            {% elif post.tipo == 'gato' %}
+                {% url 'gatos' %}
+            {% else %}
+                {% url 'otros' %}
+            {% endif %}" class="right btn-flat waves-effect waves-light black-text tooltipped" data-tooltip='Ver mas {{ post.tipo }}s para adopción'> <strong> Ver mas {{ post.tipo }}s </strong> 
+        </a>
+
+    </div>
+
+    <div class="col s12">
+        {% if post.nombre != 'Sin nombre aún :(' %}
+        
+            <p> <h4> {{ post.nombre|title }} <i class="material-icons fixed">favorite</i> </h4></p>
+
+        {% else %}
+            <p> <h4> {{ post.nombre|title }}
+        {% endif %}
+    </div>
+
+    <div class="slider redondeado col s12">
+        <ul class="slides redondeado">
+            <li class='redondeado'>
+                {% comment %} <img src="https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2017/10/30/15093416326666.jpg"> {% endcomment %}
+                
+                <img src="{{post.img1.url}}" alt="{{post.nombre}}">
+                
+                <div class="caption center-align">
+                    {% comment %} <h3>This is our big Tagline!</h3>
+                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5> {% endcomment %}
+                </div>
+            </li>
+            <li class='redondeado'>
+                <img src="{{post.img2.url}}" alt="{{post.nombre}}">
+                <div class="caption left-align">
+                    {% comment %} <h3>Left Aligned Caption</h3>
+                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5> {% endcomment %}
+                </div>
+            </li>
+            <li class='redondeado'>
+                <img src="{{post.img3.url}}" alt={{post.nombre}}>
+                <div class="caption right-align">
+                    {% comment %} <h3>Right Aligned Caption</h3>
+                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5> {% endcomment %}
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <table class="highlight">
+        <tbody>
+            
+            <tr>
+                <td><h5>Descripción: </h5></td>
+                <td><h5>{{ post.descripcion|lower|capfirst }}</h5></td>
+ 
+            </tr>
+
+            {% if post.raza %}
+            <tr>
+                <td><h5>Su raza es: </h5></td>
+                <td><h5>{{ post.raza|lower|capfirst }}</h5></td>
+            </tr>
+            {% endif %}
+
+            {% if post.medida != 'otro' %}
+            <tr>
+                <td><h5>Medida aproximada: </h5></td>
+                <td><h5>{{ post.medida|lower|capfirst }}</h5></td>
+            </tr>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <tr>
+                    <td><h5>Contacto: </h5></td>
+                    <td><h5>{{ post.contacto|capfirst }} </h5></td>
+                </tr>
+
+        </tbody>
+    </table>
+
+            {% else %}
+{% comment %}                 <tr>
+                    <td> {% endcomment %}
+
+        </tbody>
+    </table>
+                <div class="col s12">
+                    <p><h5><span class="blue-text teal lighten-5 left redondeado"> Por favor <a href="{% provider_login_url 'google' %}?next={{request.path}}">ingrese</a> para poder ver las formas de contacto. </span> </h5></p>
+                    {% comment %} href="{% provider_login_url 'google' %}?next={{request.path}}" no funciona bien {% endcomment %}
+                </div>
+{% comment %}                     </td>
+                </tr> {% endcomment %}
+            {% endif %}
+                
+
+            
+
+
+
+
+{% comment %}     
+    <div class="col s12">
+        <p><h5>Descripción: {{ post.descripcion|lower }} </h5></p>
+    </div>
+
+    <div class="col s12">
+        {% if post.mascota.raza %}
+            <div class="divider"></div>
+            <p> <h5>Su raza es: {{ post.mascota.raza|lower }}</h5></p>
+        {% endif %}
+    </div>
+
+    <div class="col s12">
+        {% if post.mascota.medida != 'otro' %}
+            <div class="divider"></div>
+            <p><h5>La medida es: {{ post.mascota.medida|lower }}</h5></p>
+        {% endif %}
+    </div>
+
+    <div class="col s12">
+        {% if user.is_authenticated %}
+            <div class="divider"></div>
+            <p><h5>Contacto: {{ post.contacto }} </h5></p>
+
+        {% else %}
+            <div class="divider"></div>
+            <p><h5><span class="blue-text teal lighten-5 left redondeado"> Por favor <a href="{% provider_login_url 'google' %}">ingrese</a> para poder ver las formas de contacto. </span> </h5></p>
+            
+        {% endif %}
+    </div> {% endcomment %}
+
+
+    {% if user.is_authenticated %}
+        <div class="col s12 right-align">
+            <div class="divider"></div>
+            <p><h5>Publicado por: {{post.autor}} </h5></p>
+        </div>
+    {% endif %}
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

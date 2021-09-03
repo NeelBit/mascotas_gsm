@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+{% load static %}
+
+<!-- probando  -->
+{% load socialaccount %}
+
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'mascotasgsmApp/img/favicon.ico' %}">
+
+    <title>Mascotas GSM{%block title%}{% endblock %}</title>
+
+    <link href="{% static 'mascotasgsmApp/css/style.css' %}" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- probando botones de compartir contenido -->
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=6127f000a3aee000125e7057&product=sticky-share-buttons" async="async"></script>
+
+    <script>
+
+        $(document).ready(function(){
+
+            $('.sidenav').sidenav();
+
+            $('.tooltipped').tooltip({delay: 50});
+
+            $('.tabs').tabs();
+
+            $('.slider').slider();
+
+            $('.dropdown-trigger-barra').dropdown({
+                coverTrigger: false,
+                hover: true,
+            });
+
+            $('.dropdown-trigger').dropdown({
+                coverTrigger: false,
+            });
+
+            $('select').formSelect();
+
+        });
+
+    </script>
+
+</head>
+<body class="teal lighten-4">
+<!-- header -->
+<header>
+
+    <!-- navbar -->
+    <nav class="navbar-fixed hoverable light-blue darken-2">
+
+        <div class="nav-wrapper">
+            <a href="{% url 'home' %}" class="brand-logo center" style="text-shadow: 2px 2px 3px black" >MascotasGSM</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down ">
+                <li class="tooltipped waves-effect waves-light" data-tooltip="Quiero adoptar una mascota"><a href=" {% url 'adopta' %} ">Adoptar<i class="material-icons right">favorite</i></a></li>
+                <li class="tooltipped waves-effect waves-light" data-tooltip="Poner en adopción una mascota"><a href=" {% url 'poner_adopcion' %} ">Poner en adopción<i class="material-icons right">pets</i></a></li>
+                <li>
+                    <a class='dropdown-trigger-barra' data-target='dropdownBarra'> <i class="material-icons">account_circle</i> </a>
+
+                    <!-- Dropdown Structure -->
+                    <ul id='dropdownBarra' class='dropdown-content'>
+
+                        {% comment %} <li class="divider" tabindex="-1"></li> {% endcomment %}
+                        {% if user.is_authenticated %}
+
+                            <li class="waves-effect waves-red redondeado"><a class="center-align red-text text-darken-2" href="{% url 'logout'  %}"> <strong> Salir </strong> </a></li>
+                        {% else %}
+
+                            <li class="waves-effect waves-green redondeado" ><a class="center-align green-text text-darken-2" href="{% provider_login_url 'google' %}"> <strong> Ingresar </strong> </a></li>
+                        {% endif %}
+
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+
+    <!-- sidenav -->
+    <ul class="sidenav light-blue darken-1 white-text" id="mobile-demo">
+
+        <li>
+            <div class="user-view center-align white hoverable">
+                <a href="{% url 'home' %}"><h3 style="text-shadow: 2px 2px 3px black" >MascotasGSM</h3></a>
+          </div>
+        </li>
+        <li><div class="divider"></div></li>
+        <li><a class="waves-effect waves-light white-text" href=" {% url 'adopta' %} ">Quiero adoptar<i class="material-icons right">favorite</i></a></li>
+        <li><a class="waves-effect waves-light white-text" href=" {% url 'poner_adopcion' %} ">Poner en adopción<i class="material-icons right">pets</i></a></li>
+
+        <!-- probando usuario desde la barra lateral -->
+        <li>
+
+            {% if user.is_authenticated %}
+                <a class='dropdown-trigger white-text' data-target='dropdownLateral'> {{ user.username }} <i class="material-icons right">account_circle</i> </a>
+            {% else %}
+                <a class='dropdown-trigger white-text' data-target='dropdownLateral'> Usuario <i class="material-icons right">account_circle</i> </a>
+            {% endif %}
+
+
+            <!-- Dropdown Structure -->
+            <ul id='dropdownLateral' class='dropdown-content'>
+                {% if user.is_authenticated %}
+
+                    <li class="waves-effect waves-red redondeado"><a class="center-align red-text text-darken-2" href="{% url 'logout'  %}"> <strong> Salir </strong> </a></li>
+                {% else %}
+
+                    <li class="waves-effect waves-green redondeado" ><a class="center-align green-text text-darken-2" href="{% provider_login_url 'google' %}"> <strong> Ingresar </strong> </a></li>
+                {% endif %}
+            </ul>
+        </li>
+
+        <li><div class="divider"></div></li>
+        
+        <div class="col s12 blue-grey center-align">
+            
+            Publicidad(?)
+
+        </div>
+
+        <li><div class="divider"></div></li>
+
+        <div class="col s12">
+            
+            <ul class="tabs transparent">
+                <li class="tab col s6 hoverable"><a href="#ultimosTres" class="white-text waves-effect waves-light light-blue darken-2">Adopta hoy</a></li>
+                <!-- <li class="tab col s6 hoverable"><a href="#test11" class="white-text waves-effect waves-light light-blue darken-2">Test 11</a></li> -->
+            </ul>
+            
+            <div id="ultimosTres" class="col s12 center-align light-blue darken-4 redondeado">
+                <div class="slider">
+                    <ul class="slides transparent">
+                        
+                        {% if ultimosTres %}
+
+                            {% for u in ultimosTres %}
+                                {% if u %}
+                                <li>
+                                    <img class="redondeado" src="{{u.img1.url}}" alt="{{u.nombre}}">
+                                    <div class="caption center-align">
+                                        <h3 style="text-shadow: 1px 1px 2px black">{{u.descripcion|capfirst|truncatechars:40|linebreaksbr}} </h3>
+                                        <h5 class="light grey-text text-lighten-3" style="text-shadow: 1px 1px 2px blue">{{u.nombre|capfirst}}</h5>
+                                    </div>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        
+                        {% else %}
+                            <h3>Todavía no hay ninguna mascota publicada <i class="material-icons">sentiment_very_dissatisfied</i></h3>
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </div>
+
+            <!--
+            <div id="test11" class="col s12 center-align light-blue darken-4 redondeado">
+            
+                <blockquote> Test 11</blockquote>
+            
+            </div>
+            -->
+        </div>
+
+    </ul>
+</header>
+
+
+<!-- main -->
+<main>
+    <div class="container">
+
+        <section>
+            {% comment %} probando compartir contenido https://sharethis.com/ {% endcomment %}
+            <div class="sharethis-sticky-share-buttons"></div>
+            
+            <div class="row"> 
+                {% block content %}
+
+                {% endblock %}
+
+
+                <!-- paginacion -->
+                {% block pagination %}
+                    {% if page_obj.number > 1 %}
+
+                    <div class="col s12 center teal lighten-5 redondeado">
+
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">{% comment %} &laquo; {% endcomment %} <i class="material-icons">first_page</i> </a>
+                                <li><a class="waves-effect" href="?page={{ page_obj.previous_page_number }}">{% comment %} &laquo; {% endcomment %} <i class="material-icons tooltipped" data-tooltip="Ir a página anterior">chevron_left</i> </a></li>
+                            {% endif %}
+
+                            {% for i in page_obj.paginator.page_range %}
+                                <li {% if page_obj.number == i %} class="active blue" {% endif %}>
+                                    <a class="waves-effect hoverable" href="?page={{i}}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li><a class="waves-effect waves-circle waves-light" href="?page={{ page_obj.next_page_number }}">{% comment %} &raquo; {% endcomment %} <i class="material-icons tooltipped" data-tooltip="Ir a siguiente página">chevron_right</i> </a></li>
+                                <a href="?page={{ page_obj.paginator.num_pages }}"> <i class="material-icons">last_page</i> {% comment %} &raquo; {% endcomment %}</a> 
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    {% endif %}
+                {% endblock %}
+
+
+            </div>
+
+        </section>
+
+    </div>
+</main>
+
+
+<!-- footer -->
+<footer class="page-footer hoverable light-blue darken-2">
+
+        <div class="container">
+            <div class="row">
+                
+                <div class="col s4 blue-grey center-align">
+                    
+                    Publicidad(?) aquí
+
+                </div>
+
+                <div class="col s8">
+                    
+                    <ul class="tabs transparent">
+                        <li class="tab col s4 hoverable"><a href="#donar" class="white-text waves-effect waves-light">Doná XMR</a></li>
+                        <li class="tab col s4 hoverable"><a href="#ultimosFooter" class="white-text waves-effect waves-light active">Últimos</a></li>
+                        <li class="tab col s4 hoverable"><a href="#acercaDe" class="white-text waves-effect waves-light">Acerca de</a></li>
+                    </ul>
+                    
+                    <div id="donar" class="col s12 center-align light-blue darken-4 redondeado">
+                        <section>
+                        <figure>
+                            <img class="responsive-img" src="{% static 'mascotasgsmApp/img/xmr_mascotasgsm.png' %}" alt="donar xmr">
+
+                            <figcaption>
+                                <div class="col s12 flow-text">
+                                82WzsfNBBuneQvxnovfp
+                                UTEP2hc7PAzhPV7LMTqa
+                                2KbzhdERmvUSYwLAWoJ3
+                                i6bFFW3bWAnCW22rpPLb
+                                GX3R3BCvVFQF9SH</div>
+                            </figcaption>
+                        </figure>
+                        </section>
+                    </div>
+
+                    <div id="ultimosFooter" class="col s12 center-align light-blue darken-4 redondeado ">
+                        <div class="slider">
+                            <ul class="slides transparent">
+
+                                {% if ultimosTres %}
+                                    {% for u in ultimosTres %}
+                                        <li>
+                                            <img class="redondeado" src="{{u.img1.url}}" alt={{u.nombre}} width="50">
+                                            
+                                            <div class="caption center-align">
+                                                <h3 style="text-shadow: 1px 1px 2px black">{{u.descripcion|capfirst|truncatechars:40|linebreaksbr}} </h3>
+                                                <h5 class="light grey-text text-lighten-3" style="text-shadow: 1px 1px 2px blue">{{u.nombre|capfirst}}</h5>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+
+                                {% else %}
+                                <h3>Todavía no hay ninguna mascota publicada <i class="material-icons">sentiment_very_dissatisfied</i></h3>
+                                {% endif %}
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="acercaDe" class="col s12 center-align light-blue darken-4 redondeado">
+                        <p>Proyecto propio que pretende ser una plataforma local que permita la intermediación entre personas de General José de San Martín, Chaco; que deseen adoptar o poner en adopción alguna mascota.</p>
+                        <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer-copyright hoverable">
+            <div class="container">
+            Hoy es: {% now "SHORT_DATE_FORMAT" %}
+            <a target="_blank" class="grey-text text-lighten-4 right" href="https://github.com/NeelBit/"> <i class="material-icons prefix left">code</i> Github del autor</a>
+            </div>
+        </div>
+ </footer>
+
+</body>
+</html>
