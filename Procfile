@@ -1,0 +1,1 @@
+web: gunicorn mascotasgsm.wsgi --log-file -
